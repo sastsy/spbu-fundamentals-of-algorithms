@@ -7,7 +7,7 @@ from numpy.typing import NDArray
 from src.common import ProblemCase
 
 
-class Stack:
+class StackLIFO:
     """LIFO queue"""
 
     def __init__(self, max_n: int, dtype: Any) -> None:
@@ -52,7 +52,7 @@ def get_starting_symbol(sym: str) -> str:
 
 
 def are_parentheses_valid(s: str) -> bool:
-    stack = Stack(max_n=100, dtype=str)
+    stack = StackLIFO(max_n=100, dtype=str)
     stack.push(s[0])
     starting_symbols = ["(", "{", "["]
     #    ending_symbols = [')', '}', ']']
