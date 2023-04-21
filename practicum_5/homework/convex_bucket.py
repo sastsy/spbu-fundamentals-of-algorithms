@@ -7,7 +7,7 @@ from src.plotting import plot_points
 
 
 def cross_product(p1: NDArray, p2: NDArray, r: NDArray) -> int:
-    return (p1[0] - r[0]) * (p2[1] - r[1]) - (p1[1] - r[1]) * (p2[0] - r[0])
+    return  (p1[0] - r[0]) * (p2[1] - r[1]) - (p1[1] - r[1]) * (p2[0] - r[0])
 
 
 def convex_bucket(points: NDArray) -> NDArray:

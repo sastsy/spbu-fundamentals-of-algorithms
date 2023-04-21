@@ -9,34 +9,77 @@ import yaml
 class Node:
     key: Any
     data: Any = None
-    left: Node = None
-    right: Node = None
+    left: Node = None  # type: ignore
+    right: Node = None # type: ignore
 
 
 class BinaryTree:
     def __init__(self) -> None:
-        self.root: Node = None
+        self.root: Node = None # type: ignore
 
     def empty(self) -> bool:
         return self.root is None
 
-    def zigzag_level_order_traversal(self) -> list[Any]:
+    def zigzag_level_order_traversal(self) -> list[Any]: # type: ignore
 
-        ##########################
-        ### PUT YOUR CODE HERE ###
-        ##########################
+        if self.root is None:
+            return []
+        
+        traversed_list = [[]]
+        q = []
+        next = []
+        left_to_right = True
 
-        pass
+        q.append(self.root)
+
+        while len(q) > 0:
+            node = q.pop()
+            if node.key:
+                traversed_list[-1].append(node.key)
+            if left_to_right:
+                if node.left:
+                    next.append(node.left)
+                if node.right:
+                    next.append(node.right)
+            else:
+                if node.right:
+                    next.append(node.right)
+                if node.left:
+                    next.append(node.left)
+            
+            if len(q) == 0:
+                left_to_right = not left_to_right
+                q, next = next, q
+                if len(q) != 0:
+                    traversed_list.append([])
+
+        return traversed_list
 
 
-def build_tree(list_view: list[Any]) -> BinaryTree:
+def build_tree(list_view: list[Any]) -> BinaryTree: # type: ignore
     bt = BinaryTree()
 
-    ##########################
-    ### PUT YOUR CODE HERE ###
-    ##########################
+    if len(list_view) == 0:
+        return bt
 
-    pass
+    bt.root = Node(list_view[0])
+
+    q = [bt.root]
+    i = 1
+    while i < len(list_view):
+        current_node = q.pop(0)
+        if i < len(list_view):
+            current_node.left = Node(list_view[i])
+            q.append(current_node.left)
+            i += 1
+        if i < len(list_view):
+            current_node.right = Node(list_view[i])
+            q.append(current_node.right)
+            i += 1
+
+    return bt
+    
+
 
 
 if __name__ == "__main__":
@@ -47,7 +90,7 @@ if __name__ == "__main__":
     # Avoid recursive traversal!
 
     with open(
-        "practicum_6/homework/binary_tree_zigzag_level_order_traversal_cases.yaml", "r"
+        "spbu-fundamentals-of-algorithms/practicum_6/homework/binary_tree_zigzag_level_order_traversal_cases.yaml", "r"
     ) as f:
         cases = yaml.safe_load(f)
 
@@ -55,3 +98,4 @@ if __name__ == "__main__":
         bt = build_tree(c["input"])
         zz_traversal = bt.zigzag_level_order_traversal()
         print(f"Case #{i + 1}: {zz_traversal == c['output']}")
+        print(zz_traversal)
