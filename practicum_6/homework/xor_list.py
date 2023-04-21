@@ -9,9 +9,9 @@ import yaml
 class Element:
     key: Any
     data: Any = None
-    np: int = None
+    np: int = None # type: ignore
 
-    def next(self) -> Element:
+    def next(self) -> Element: # type: ignore
 
         ##########################
         ### PUT YOUR CODE HERE ###
@@ -19,7 +19,7 @@ class Element:
 
         pass
 
-    def prev(self) -> Element:
+    def prev(self) -> Element: # type: ignore
 
         ##########################
         ### PUT YOUR CODE HERE ###
@@ -30,7 +30,9 @@ class Element:
 
 class XorDoublyLinkedList:
     def __init__(self) -> None:
-        self.head: Element = None
+        self.head: Element = None # type: ignore
+        self.tail: Element = None # type: ignore
+        self.nodes = []
 
         ##########################
         ### PUT YOUR CODE HERE ###
@@ -52,7 +54,7 @@ class XorDoublyLinkedList:
 
     def to_pylist(self) -> list[Any]:
         py_list = []
-        next_el: Element = self.head()
+        next_el: Element = self.head() # type: ignore
         while next_el is not None:
             py_list.append(next_el.key)
             next_el = next_el.next()
@@ -61,7 +63,7 @@ class XorDoublyLinkedList:
     def empty(self):
         return self.head is None
 
-    def search(self, k: Element) -> Element:
+    def search(self, k: Element) -> Element: # type: ignore
         """Complexity: O(n)"""
 
         ##########################
@@ -74,11 +76,15 @@ class XorDoublyLinkedList:
         """Insert to the front of the list (i.e., it is 'prepend')
         Complexity: O(1)
         """
-        ##########################
-        ### PUT YOUR CODE HERE ###
-        ##########################
+        self.nodes.append(x)
+        if self.head is not None:
+            self.head.np = id(x) ^ self.head.np
+            x.np = id(self.head)
+            self.head = x
+        else:
+            self.head = x
+            self.tail = x
 
-        pass
 
     def remove(self, x: Element) -> None:
         """Remove x from the list
@@ -91,16 +97,11 @@ class XorDoublyLinkedList:
 
         pass
 
-    def reverse(self) -> XorDoublyLinkedList:
+    def reverse(self) -> XorDoublyLinkedList: # type: ignore
         """Returns the same list but in the reserved order
         Complexity: O(1)
         """
-
-        ##########################
-        ### PUT YOUR CODE HERE ###
-        ##########################
-
-        pass
+        self.head, self.tail = self.tail, self.head
 
 
 if __name__ == "__main__":
