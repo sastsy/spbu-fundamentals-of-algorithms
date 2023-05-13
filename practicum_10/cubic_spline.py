@@ -60,3 +60,4 @@ if __name__ == "__main__":
     ax.plot(years, gdp, "x", markersize=10)
     ax.plot(x, spline_vectorized(x, years, coeff))
     ax.grid()
+    plt.show()
