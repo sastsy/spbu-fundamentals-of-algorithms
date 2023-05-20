@@ -3,17 +3,34 @@ from numpy.typing import NDArray
 
 
 def lu(A: NDArray, permute: bool) -> tuple[NDArray, NDArray, NDArray]:
-    ##########################
-    ### PUT YOUR CODE HERE ###
-    ##########################
-    pass
+    for column in range(len(A)):
+        if permute:
+            P = np.eye(len(A))
+            max_pivot = np.NINF
+            max_pivot_row = 0
+            for row in range(column, len(A[column])):
+                if A[row][column] > max_pivot:
+                    max_pivot = A[row][column]
+                    max_pivot_row = row
+            P[column], P[max_pivot_row] = P[max_pivot_row], P[column].copy()
+            A = np.dot(P, A)
+        U, L = A.copy(), np.eye(len(A))
+        for row in range(column + 1, len(A[column])):
+            E_inv = np.eye(len(A))
+            E_inv[row][column] = U[row][row] / U[column][column]
+            U[row] -= U[column] * (U[row][row] / U[column][column])
+            L = np.dot(L, E_inv)
+    
+    return tuple([L, U, P])
 
 
 def solve(L: NDArray, U: NDArray, P: NDArray, b: NDArray) -> NDArray:
-    ##########################
-    ### PUT YOUR CODE HERE ###
-    ##########################
-    pass
+    for i in range(len(L)):
+        for j in range(len(L)):
+            if i != j:
+                L[i][j] = -L[i][j]
+                U[i][j] = -U[i][j]
+    return np.dot(np.dot(np.dot(U, L), P), b)
 
 
 def get_A_b(a_11: float, b_1: float) -> tuple[NDArray, NDArray]:
@@ -31,6 +48,7 @@ if __name__ == "__main__":
     A, b = get_A_b(a_11, b_1)
     # With pivoting
     L, U, P = lu(A, permute=True)
+    print(L, U, P, end='\n')
     x = solve(L, U, P, b)
     assert np.all(np.isclose(x, [1, -7, 4])), f"The anwser {x} is not accurate enough"
     # Without pivoting
